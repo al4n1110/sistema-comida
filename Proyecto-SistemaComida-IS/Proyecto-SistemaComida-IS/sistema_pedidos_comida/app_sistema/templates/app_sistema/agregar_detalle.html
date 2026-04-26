@@ -1,0 +1,49 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Agregar Plato | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-7">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">➕ Agregar plato al pedido</h2>
+
+                <p class="subtitle-muted mb-3">
+                    Pedido <strong>#{{ pedido.id_pedido }}</strong> —  
+                    Sucursal <strong>{{ pedido.sucursal.direccion }}</strong>
+                </p>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'detalle_pedido' pedido.id_pedido %}"
+                        class="btn btn-outline-secondary btn-pill">
+                            Finalizar pedido
+                        </a>
+
+                        <button class="btn btn-primary btn-pill">
+                            Agregar plato
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <h4 class="mb-2">🧾 Platos añadidos</h4>
+
+                {% for d in pedido.detalles.all %}
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span>{{ d.cantidad }} × {{ d.plato.nombre_plato }}</span>
+                        <strong>Bs {{ d.subtotal }}</strong>
+                    </div>
+                {% empty %}
+                    <p class="subtitle-muted">Aún no agregaste ningún plato.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

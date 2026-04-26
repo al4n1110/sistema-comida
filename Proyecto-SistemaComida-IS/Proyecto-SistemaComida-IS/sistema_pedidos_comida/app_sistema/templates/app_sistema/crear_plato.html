@@ -1,0 +1,41 @@
+{% extends "app_sistema/base.html" %}
+
+{% block title %}Crear plato | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">
+                    🍽️ Crear plato
+                    {% if sucursal %}<small class="subtitle-muted">para {{ sucursal.nombre }}</small>{% endif %}
+                </h2>
+                <p class="subtitle-muted mb-4">
+                    Define el nombre, categoría, precio y disponibilidad del nuevo plato.
+                </p>
+
+                <form method="post" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        {% if sucursal %}
+                            <a href="{% url 'platos_sucursal' sucursal.id_sucursal %}" class="btn btn-outline-secondary btn-pill">
+                                Cancelar
+                            </a>
+                        {% else %}
+                            <a href="{% url 'lista_empresas' %}" class="btn btn-outline-secondary btn-pill">
+                                Cancelar
+                            </a>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary btn-pill">
+                            Guardar plato
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

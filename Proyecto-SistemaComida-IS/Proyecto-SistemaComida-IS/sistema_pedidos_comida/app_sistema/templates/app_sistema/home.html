@@ -1,0 +1,214 @@
+{% extends "app_sistema/base.html" %}
+{% load static %}
+
+<!-- {% block title %}Inicio | EXPRESS{% endblock %} -->
+
+{% block content %}
+<div class="row align-items-center mb-4 fade-in-up">
+    <div class="col-md-7">
+        <h2 class="page-title mb-2">
+        ¡Elige lo que más te gusta,fácil y rápido!
+        </h2>
+
+        {% if request.user.is_authenticated %}
+        <p class="subtitle-muted mb-3">
+            Hola <strong>{{ request.user.username }}</strong>, gestiona tus pedidos y actividades desde aquí.
+        </p>
+        {% else %}
+        <p class="subtitle-muted mb-3">
+            Pide en segundos desde tus restaurantes favoritos. Regístrate o inicia sesión y comienza a disfrutar.
+        </p>
+        {% endif %}
+
+        {% if not request.user.is_authenticated %}
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a href="{% url 'registrar' %}" class="btn btn-crear-cuenta btn-primary">
+                Crear cuenta
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                Iniciar sesión
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-5 text-md-end text-center mt-3 mt-md-0">
+        <img src="{% static 'img/img-logo.png' %}" alt="Repartidor en moto" class="img-fluid"
+            style="max-height: 140px;">
+    </div>
+</div>
+
+<hr class="my-4">
+
+{% if request.user.is_authenticated %}
+
+{% if tipo_usuario == 'admin' %}
+<!-- PANEL ADMIN -->
+<div class="row g-3">
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">🏢 Gestión de empresas</h5>
+                <p class="card-text subtitle-muted">
+                    Administra las empresas de comida registradas en la plataforma y sus sucursales.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'lista_empresas' %}" class="btn btn-ver-empresa btn-primary btn-sm">
+                        Ver empresas
+                    </a>
+                    <a href="{% url 'crear_empresa' %}" class="btn btn-crear-empresa btn-outline-primary btn-sm">
+                        Crear empresa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">📊 Pedidos globales</h5>
+                <p class="card-text subtitle-muted">
+                    Revisa todos los pedidos del sistema, su estado, cliente asociado y repartidor asignado.
+                </p>
+                <a href="{% url 'lista_pedidos_admin' %}" class="btn btn-ver-pedidos btn-warning btn-sm">
+                    Ver pedidos
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">👥 Usuarios</h5>
+                <p class="card-text subtitle-muted">
+                    Consulta los clientes y repartidores que forman parte de la plataforma.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'lista_clientes_admin' %}" class="btn btn-ver-clientes btn-primary btn-sm">
+                        Ver clientes
+                    </a>
+                    <a href="{% url 'lista_repartidores_admin' %}" class="btn btn-ver-repartidores btn-danger btn-sm">
+                        Ver repartidores
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elif tipo_usuario == 'cliente' %}
+<!-- PANEL CLIENTE -->
+<div class="row g-3">
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">🍔 Hacer un pedido</h5>
+                <p class="card-text subtitle-muted">
+                    Explora las empresas, elige una sucursal y revisa los platos disponibles para hacer tu pedido.
+                </p>
+                <a href="{% url 'lista_empresas' %}" class="btn btn-registrarme btn-primary">
+                    Ver empresas y sucursales
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">🧾 Mis pedidos</h5>
+                <p class="card-text subtitle-muted">
+                    Consulta el historial de tus pedidos y revisa su estado (pendiente, asignado, entregado).
+                </p>
+                <a href="{% url 'mis_pedidos' %}" class="btn btn-outline-primary">
+                    Ver mis pedidos
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 fade-in-up mt-2">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">📍 Mis datos de entrega</h5>
+                <p class="card-text subtitle-muted">
+                    Asegúrate de que tu dirección y referencia de entrega estén correctas para recibir tus pedidos.
+                </p>
+                <a href="{% url 'completar_cliente' %}" class="btn btn-outline-secondary">
+                    Editar datos de cliente
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elif tipo_usuario == 'repartidor' %}
+<!-- PANEL REPARTIDOR -->
+<div class="row g-3">
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">🚚 Pedidos pendientes</h5>
+                <p class="card-text subtitle-muted">
+                    Toma pedidos que aún no tienen repartidor o revisa los que ya tienes asignados.
+                </p>
+                <a href="{% url 'pedidos_pendientes' %}" class="btn btn-danger">
+                    Ver pedidos pendientes
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title">👤 Datos de repartidor</h5>
+                <p class="card-text subtitle-muted">
+                    Revisa que tu vehículo, tipo de vehículo y disponibilidad estén actualizados.
+                </p>
+                <a href="{% url 'completar_repartidor' %}" class="btn btn-outline-secondary">
+                    Editar datos de repartidor
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<p class="subtitle-muted">No se reconoce tu tipo de usuario.</p>
+{% endif %}
+
+{% else %}
+<!-- USUARIO NO AUTENTICADO -->
+<div class="row mt-4">
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery mb-3">
+            <div class="card-body">
+                <h5 class="card-title">🍕 Pide en segundos</h5>
+                <p class="card-text subtitle-muted">
+                    Crea una cuenta y empieza a pedir comida de tus lugares favoritos sin complicaciones.
+                </p>
+                <a href="{% url 'registrar' %}" class="btn btn-registrarse btn-primary">
+                    Registrarse
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery mb-3">
+            <div class="card-body">
+                <h5 class="card-title">🔑 ¿Ya tienes cuenta?</h5>
+                <p class="card-text subtitle-muted">
+                    Inicia sesión para ver tus pedidos, direcciones guardadas y más.
+                </p>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                    Iniciar sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "app_sistema/base.html" %}
+{% load static %}
+
+{% block title %}Platos | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-1">🍽️ Platos en {{ sucursal.direccion }}</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Elige un plato para añadir a tu pedido.
+</p>
+
+{% if tipo_usuario == 'admin' %}
+<a href="{% url 'crear_plato' sucursal.id_sucursal %}" class="btn btn-primary mb-4 fade-in-up">
+    ➕ Crear plato
+</a>
+{% endif %}
+
+<div class="row g-4">
+    {% for plato in platos %}
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+
+                {# Imagen del plato (si tiene) #}
+                {% if plato.imagen %}
+                <div class="mb-2">
+                    <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre_plato }}" class="img-fluid rounded"
+                        style="height: 160px; width: 100%; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                <h4 class="card-title">{{ plato.nombre_plato }}</h4>
+                <p class="subtitle-muted mb-2">{{ plato.categoria }}</p>
+                <p>{{ plato.descripcion }}</p>
+
+                <h5 class="fw-bold text-success mb-3">Bs {{ plato.precio }}</h5>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'crear_pedido' sucursal.id_sucursal %}" class="btn btn-ver-clientes btn-primary btn-sm">
+                        Hacer pedido
+                    </a>
+
+                    {% if tipo_usuario == 'admin' %}
+                    <a href="{% url 'editar_plato' plato.id_plato %}" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+                    <a href="{% url 'eliminar_plato' plato.id_plato %}" class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="fade-in-up">No hay platos disponibles todavía.</p>
+    {% endfor %}
+</div>
+{% endblock %}

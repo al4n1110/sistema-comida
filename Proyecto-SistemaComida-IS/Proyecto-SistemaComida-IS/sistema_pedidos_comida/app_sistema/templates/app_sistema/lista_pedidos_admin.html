@@ -1,0 +1,81 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Pedidos | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-2">📊 Todos los pedidos</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Vista general de todos los pedidos realizados en la plataforma.
+</p>
+
+<div class="table-responsive fade-in-up">
+    <table class="table table-modern align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Sucursal</th>
+                <th>Estado</th>
+                <th>Repartidor</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in pedidos %}
+            <tr>
+                <td>#{{ p.id_pedido }}</td>
+                <td>
+                    {% with det=p.detalles.all.0 %}
+                        {% if det %}
+                            {{ det.fecha_pedido }} {{ det.hora_pedido }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {{ p.cliente.id_cliente.nombres }}
+                    {{ p.cliente.id_cliente.paterno }}
+                </td>
+                <td>{{ p.sucursal.direccion }}</td>
+
+                <td>
+                    {% if p.estado == 'pendiente' %}
+                        <span class="badge-estado badge-estado-pendiente">Pendiente</span>
+                    {% elif p.estado == 'asignado' %}
+                        <span class="badge-estado badge-estado-asignado">Asignado</span>
+                    {% elif p.estado == 'entregado' %}
+                        <span class="badge-estado badge-estado-entregado">Entregado</span>
+                    {% else %}
+                        {{ p.estado }}
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if p.repartidor %}
+                        {{ p.repartidor.id_repartidor.nombres }}
+                        {{ p.repartidor.id_repartidor.paterno }}
+                    {% else %}
+                        <span class="subtitle-muted">Sin asignar</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'detalle_pedido' p.id_pedido %}"
+                       class="btn btn-info btn-sm btn-pill">
+                        Ver detalle
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center subtitle-muted">
+                    No hay pedidos registrados aún.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

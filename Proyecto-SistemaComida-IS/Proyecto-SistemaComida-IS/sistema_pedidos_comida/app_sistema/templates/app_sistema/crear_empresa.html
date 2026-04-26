@@ -1,0 +1,32 @@
+{% extends "app_sistema/base.html" %}
+
+{% block title %}Crear empresa | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">🏢 Crear empresa</h2>
+                <p class="subtitle-muted mb-4">
+                    Registra una nueva empresa para que pueda gestionar sus sucursales y platos.
+                </p>
+
+                <form method="post" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'lista_empresas' %}" class="btn btn-outline-secondary btn-pill">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-pill">
+                            Guardar empresa
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

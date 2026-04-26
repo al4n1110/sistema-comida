@@ -1,0 +1,37 @@
+{% extends "app_sistema/base.html" %}
+
+{% block title %}Confirmar entrega | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body text-center">
+                <h3 class="page-title mb-3">📦 Confirmar entrega</h3>
+                <p class="subtitle-muted mb-3">
+                    ¿Confirmas que el pedido <strong>#{{ pedido.id_pedido }}</strong> ha sido entregado?
+                </p>
+
+                <p class="mb-1">
+                    <strong>Dirección de entrega:</strong> {{ pedido.direccion_entrega }}
+                </p>
+                <p class="mb-3">
+                    <strong>Sucursal:</strong> {{ pedido.sucursal.direccion }}
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-center gap-3 mt-2">
+                        <a href="{% url 'mis_pedidos' %}" class="btn btn-outline-secondary btn-pill">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-success btn-pill">
+                            Sí, confirmar entrega
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

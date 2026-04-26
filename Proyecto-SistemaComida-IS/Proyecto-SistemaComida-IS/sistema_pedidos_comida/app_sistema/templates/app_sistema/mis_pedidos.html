@@ -1,0 +1,81 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Mis pedidos | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-2">🧾 Mis pedidos</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Aquí puedes ver el historial de tus pedidos y su estado actual.
+</p>
+
+<div class="table-responsive fade-in-up">
+    <table class="table table-modern align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Sucursal</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in pedidos %}
+            <tr>
+                <td>#{{ p.id_pedido }}</td>
+
+                {# Fecha/hora desde el primer detalle del pedido #}
+                <td>
+                    {% with det=p.detalles.all.0 %}
+                        {% if det %}
+                            {{ det.fecha_pedido }} {{ det.hora_pedido }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    {% endwith %}
+                </td>
+
+                <td>{{ p.sucursal.direccion }}</td>
+
+                <td>
+                    {% if p.estado == 'pendiente' %}
+                        <span class="badge-estado badge-estado-pendiente">Pendiente</span>
+                    {% elif p.estado == 'asignado' %}
+                        <span class="badge-estado badge-estado-asignado">Asignado</span>
+                    {% elif p.estado == 'entregado' %}
+                        <span class="badge-estado badge-estado-entregado">Entregado</span>
+                    {% else %}
+                        {{ p.estado }}
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'detalle_pedido' p.id_pedido %}"
+                       class="btn btn-info btn-sm btn-pill mb-1">
+                        Ver detalle
+                    </a>
+
+                    {# Confirmar entrega solo si está asignado #}
+                    {% if p.estado == 'asignado' %}
+                    <form action="{% url 'confirmar_entrega' p.id_pedido %}"
+                          method="post"
+                          style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn btn-success btn-sm btn-pill">
+                            Confirmar entrega
+                        </button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="text-center subtitle-muted">
+                    No tienes pedidos registrados todavía.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPRESS</title>   
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="../../static/img/logo.png">
+
+    <style>
+        :root {
+            --primary: #ff5a1f;
+            --primary-dark: #e14a10;
+            --secondary: #ffb703;
+            --accent: #2ec4b6;
+            --bg: #fffaf5;
+            --card: #ffffff;
+            --text-main: #2b2b2b;
+            --text-muted: #7a7a7a;
+        }
+
+        * {
+            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #932d2d 0, transparent 70%),
+                radial-gradient(circle at bottom right, #2e1f84 0, transparent 70%),
+                var(--bg);
+            background-color: #b1b1b1;
+            color: var(--color-text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+        }
+
+        .btn {
+            border-radius: 6px !important;
+            padding: .7rem .9rem;
+        }
+
+        .btn-registrarme,
+        .btn-entrar,
+        .btn-guardar-datos,
+        .btn-registrarse,
+        .btn-guardar-cambios {
+            color: var(--text-muted);
+        }
+
+        .btn-registrarme:hover,
+        .btn-entrar:hover,
+        .btn-guardar-datos:hover,
+        .btn-registrarse:hover,
+        .btn-guardar-cambios:hover {
+            background-color: #48e !important;
+            color: #eee;
+
+        }
+        .logo-text{
+            font-weight: 800 !important;
+            color: var(--secondary);
+        }
+
+        .btn-crear-cuenta {
+            color: #333;
+        }
+
+        .btn-crear-cuenta:hover {
+            background-color: #eee !important;
+            color: var(--text-main);
+        }
+
+        .btn-ver-empresa {
+            color: var(--text-muted);
+        }
+
+        .btn-ver-clientes {
+            color: var(--text-muted);
+        }
+
+        .btn-crear-empresa {
+            border: 1px transparent solid !important;
+            transition: all .3s ease !important;
+        }
+
+        .btn-ver-empresa:hover {
+            background-color: #111 !important;
+            box-shadow: 0 0 20px #333;
+            border: 1px solid transparent !important;
+        }
+
+        .btn-ver-clientes:hover {
+            color: #eee !important;
+            background-color: var(--secondary) !important;
+            border: 1px transparent solid !important;
+            filter: drop-shadow(0 0 7px rgb(255, 167, 34));
+        }
+
+        .btn-crear-empresa:hover {
+            background-color: #48e !important;
+            box-shadow: 0 0 7px #111;
+        }
+
+        .btn-ver-repartidores {
+            background-color: inherit;
+            color: #f11a;
+        }
+
+        .btn-ver-repartidores:hover {
+            filter: drop-shadow(0 0 7px #f11);
+            border: 1px solid transparent !important;
+            background-color: #f11 !important;
+        }
+
+        .btn-ver-pedidos {
+            background-color: inherit !important;
+            border: 1px solid var(--text-muted);
+            color: var(--color-text-muted);
+            border: 1px solid var(--text-muted);
+        }
+
+        .btn-ver-pedidos:hover {
+            background-color: #f51 !important;
+            color: #eee !important;
+            filter: drop-shadow(0 0 7px #f51);
+        }
+
+        .btn-cerrar-sesion {
+            background-color: inherit !important;
+            color: #eee;
+            position: relative !important;
+            border: none !important;
+            opacity: .6;
+            overflow: hidden !important;
+            transition: all .3s ease;
+        }
+
+        .btn-cerrar-sesion:hover {
+            opacity: 1 !important;
+            color: var(--text-main) !important;
+            font-weight: 700;
+        }
+
+        .btn-cerrar-sesion::before {
+            position: absolute;
+            content: '';
+            top: 50px;
+            left: 0px;
+            width: 100%;
+            height: 300%;
+            background-color: var(--secondary);
+            z-index: -1;
+            transition: all .3s ease;
+        }
+
+        .btn-cerrar-sesion:hover::before {
+            top: -30px;
+            left: 0;
+            background-color: var(--secondary);
+            color: var(--text-main);
+        }
+
+        .navbar-delivery {
+            position: fixed !important;
+            min-width: 75% !important;
+            margin-top: 1.2rem !important;
+            border-radius: 20px !important;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(120deg, var(--primary), rgb(34, 34, 138));
+            transition: all .3s ease;
+            padding: 1rem 1.5rem !important;
+        }
+
+        .navbar-delivery.scrolled {
+            background: linear-gradient(120deg, #ff5b1fa1, rgba(34, 34, 138, 0.8));
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 20px !important;
+            padding: .8rem !important;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .navbar-brand {
+            font-weight: 750;
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center !important;
+            gap: 0.4rem;
+        }
+
+        .navbar-brand span.logo-icon {
+            font-size: 1.6rem;
+        }
+
+        .navbar-nav {
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.15rem;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: #fff;
+            transition: width 0.25s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar-user-pill {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.9rem;
+        }
+
+        main.container {
+            padding-top: 1.75rem;
+            padding-bottom: 2.5rem;
+            margin-top: 6rem;
+            padding-left: 4rem !important;
+            padding-right: 4rem !important;
+            width: 100% !important;
+            display: inline-block !important;
+            color: #ddd;
+        }
+
+        .page-title {
+            font-weight: 800;
+            font-size: clamp(1.8rem, 3vw, 2.2rem);
+            color: var(--color-primary-dark);
+        }
+
+        .subtitle-muted {
+            color: var(--color-text-muted);
+        }
+
+        .card-delivery {
+            border-radius: 1.2rem;
+            border: none;
+            background: var(--bg);
+            color: var(--text-main);
+            box-shadow: 0 3px 8px var(--text-muted);
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .card-delivery:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgb(24, 55, 179);
+        }
+
+        .card-delivery .card-title {
+            font-weight: 650;
+        }
+
+        .badge-estado {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-radius: 999px;
+            padding: 0.3rem 0.7rem;
+        }
+
+        .badge-estado-pendiente {
+            background: rgba(255, 190, 61, 0.18);
+            color: #b57400;
+        }
+
+        .badge-estado-asignado {
+            background: rgba(62, 149, 255, 0.16);
+            color: #1659b8;
+        }
+
+        .badge-estado-entregado {
+            background: rgba(46, 204, 112, 0.17);
+            color: #13803d;
+        }
+
+
+        .table-modern {
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .table-modern thead {
+            background: linear-gradient(120deg, #fff1df, #ffe4c2);
+        }
+
+        .table-modern thead th {
+            border-bottom: none;
+            color: #6a4b2c;
+            font-weight: 600;
+        }
+
+        .table-modern tbody tr:hover {
+            background: #fff8f0;
+        }
+
+        footer.footer-delivery {
+            background: radial-gradient(circle at top left, var(--primary) 0, transparent 55%),
+                radial-gradient(circle at bottom right, rgb(34, 34, 138) 0, transparent 55%),
+                #1c1b1f;
+            color: #f7f7f7;
+            position: relative;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+            padding: 2rem !important;
+        }
+
+        footer.footer-delivery::before {
+            content: "Bon Appétit";
+            position: absolute;
+            right: 40px;
+            bottom: 90px;
+            font-size: 3.2rem;
+            opacity: 0.15;
+            font-style: italic;
+            font-weight: 400;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        footer .footer-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        footer a {
+            color: #ffeede;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            border-radius: 999px;
+            font-weight: 500;
+            padding-inline: 1.3rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+            border-color: var(--color-primary-dark);
+        }
+
+        .btn-outline-primary {
+            border-radius: 999px;
+        }
+
+        .btn-pill {
+            border-radius: 999px;
+        }
+
+        /* Pagina de pedidos */
+        table th {
+            background-color: #222 !important;
+            color: #eee !important;
+        }
+
+        table tr:hover {
+            background-color: #ddda !important;
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand span.logo-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-delivery py-2 sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <span class="logo-icon">♨️</span>
+                <span class="logo-text">EXPRESS</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item me-lg-3 my-2 my-lg-0">
+                        <div class="navbar-user-pill text-light">
+                            <span>👤</span>
+                            <span>{{ request.user.username }}</span>
+                        </div>
+                    </li>
+
+                    {% if tipo_usuario == 'cliente' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mis_pedidos' %}">🧾 Mis pedidos</a>
+                    </li>
+                    {% elif tipo_usuario == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lista_pedidos_admin' %}">📊 Pedidos</a>
+                    </li>
+                    {% elif tipo_usuario == 'repartidor' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pedidos_pendientes' %}">🚚 Pedidos</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a href="{% url 'salir' %}" class="btn btn-cerrar-sesion btn-sm btn-light btn-pill">
+                            Cerrar sesión
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item me-2 mt-2 mt-lg-0">
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-light btn-pill">
+                            Ingresar
+                        </a>
+                    </li>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a href="{% url 'registrar' %}" class="btn btn-sm btn-outline-light btn-pill">
+                            Registrarse
+                        </a>
+                    </li>
+
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-delivery text-light mt-auto">
+        <div class="container py-4">
+            <div class="row text-center text-md-start">
+
+                <!-- Marca -->
+                <div class="col-md-4 mb-3">
+                    <h5>♨️ Express</h5>
+                    <p style="font-size: 0.9rem;">
+                        Sistema de pedidos de comida rápido y eficiente.
+                    </p>
+                </div>
+
+                <!-- Contacto -->
+                <div class="col-md-4 mb-3">
+                    <h6>Contacto</h6>
+                    <p style="font-size: 0.9rem;">
+                        📧 soporte@express.com <br>
+                        📍 La Paz, Bolivia
+                    </p>
+                </div>
+
+            </div>
+
+            <hr style="opacity: 0.2;">
+
+            <div class="text-center" style="font-size: 0.8rem;">
+                © 2026 Express · Sistema de control de pedidos ·
+                <a href="#">Términos</a> ·
+                <a href="#">Privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script>
+        document.addEventListener("scroll", function () {
+            const nav = document.querySelector(".navbar-delivery");
+            if (!nav) return;
+            if (window.scrollY > 10) {
+                nav.classList.add("scrolled");
+            } else {
+                nav.classList.remove("scrolled");
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".fade-in-up").forEach(el => observer.observe(el));
+        });
+
+    </script>
+</body>
+
+</html>

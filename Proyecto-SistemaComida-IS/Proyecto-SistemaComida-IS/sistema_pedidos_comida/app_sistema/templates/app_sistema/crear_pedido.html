@@ -1,0 +1,44 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Nuevo pedido | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-7">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">🧾 Crear pedido</h2>
+                {% if sucursal %}
+                    <p class="subtitle-muted mb-3">
+                        Estás realizando un pedido para la sucursal <strong>{{ sucursal.direccion }}</strong>.
+                    </p>
+                {% else %}
+                    <p class="subtitle-muted mb-3">
+                        Completa los datos para registrar tu pedido.
+                    </p>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        {% if sucursal %}
+                            <a href="{% url 'platos_sucursal' sucursal.id_sucursal %}" class="btn btn-outline-secondary btn-pill">
+                                Cancelar
+                            </a>
+                        {% else %}
+                            <a href="{% url 'lista_empresas' %}" class="btn btn-outline-secondary btn-pill">
+                                Cancelar
+                            </a>
+                        {% endif %}
+                        <button class="btn btn-success btn-pill">
+                            Guardar pedido
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

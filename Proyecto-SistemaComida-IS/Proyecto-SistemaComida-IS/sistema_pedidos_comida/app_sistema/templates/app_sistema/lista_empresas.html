@@ -1,0 +1,59 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Empresas | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-3">🏢 Empresas registradas</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Selecciona una empresa para ver sus sucursales y platos disponibles.
+</p>
+
+{% if tipo_usuario == 'admin' %}
+    <a href="{% url 'crear_empresa' %}" class="btn btn-primary mb-4 fade-in-up">
+        ➕ Crear nueva empresa
+    </a>
+{% endif %}
+
+<div class="row g-4">
+    {% for empresa in empresas %}
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+
+                {# Logo de la empresa (si tiene) #}
+                {% if empresa.logo %}
+                    <div class="text-center mb-3">
+                        <img src="{{ empresa.logo.url }}"
+                             alt="Logo de {{ empresa.nombre }}"
+                             class="img-fluid rounded"
+                             style="max-height: 120px; object-fit: contain;">
+                    </div>
+                {% endif %}
+
+                <h4 class="card-title mb-1">🏢 {{ empresa.nombre }}</h4>
+                <p class="subtitle-muted mb-3">NIT: {{ empresa.nit }}</p>
+                <p class="subtitle-muted mb-3">Teléfono: {{ empresa.telefono }}</p>
+                <p class="subtitle-muted mb-3">Correo: {{ empresa.correo }}</p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'lista_sucursales' empresa.id_empresa %}" class="btn btn-guardar-cambios btn-primary btn-sm">
+                        Ver sucursales
+                    </a>
+
+                    {% if tipo_usuario == 'admin' %}
+                        <a href="{% url 'editar_empresa' empresa.id_empresa %}" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+                        <a href="{% url 'eliminar_empresa' empresa.id_empresa %}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center fade-in-up">No hay empresas registradas aún.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Clientes | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-2">👥 Clientes</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Listado de todos los clientes registrados en la plataforma.
+</p>
+
+<div class="table-responsive fade-in-up">
+    <table class="table table-modern align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Dirección</th>
+                <th>Referencia</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for c in clientes %}
+            <tr>
+                <td>
+                    {{ c.id_cliente.nombres }}
+                    {{ c.id_cliente.paterno }}
+                </td>
+                <td>{{ c.id_cliente.telefono|default:"-" }}</td>
+                <td>{{ c.id_cliente.email|default:"-" }}</td>
+                <td>{{ c.direccion|default:"Sin dirección" }}</td>
+                <td>{{ c.preferencias_entrega|default:"Sin referencia" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="text-center subtitle-muted">
+                    No hay clientes registrados.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "app_sistema/base.html" %}
+
+{% block title %}Editar sucursal | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">✏️ Editar sucursal</h2>
+                <p class="subtitle-muted mb-4">
+                    Modifica los datos de la sucursal de <strong>{{ sucursal.empresa.nombre }}</strong>.
+                </p>
+
+                <form method="post" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'lista_sucursales' sucursal.empresa.id_empresa %}"
+                           class="btn btn-outline-secondary btn-pill">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-pill">
+                            Guardar cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

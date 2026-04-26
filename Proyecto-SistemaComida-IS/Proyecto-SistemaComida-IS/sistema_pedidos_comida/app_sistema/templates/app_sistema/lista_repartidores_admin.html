@@ -1,0 +1,52 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Repartidores | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-2">🚚 Repartidores</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Listado de repartidores registrados y su información básica.
+</p>
+
+<div class="table-responsive fade-in-up">
+    <table class="table table-modern align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Vehículo</th>
+                <th>Tipo de vehículo</th>
+                <th>Sueldo</th>
+                <th>Disponibilidad</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for r in repartidores %}
+            <tr>
+                <td>
+                    {{ r.id_repartidor.nombres }}
+                    {{ r.id_repartidor.paterno }}
+                </td>
+                <td>{{ r.id_repartidor.telefono|default:"-" }}</td>
+                <td>{{ r.vehiculo|default:"-" }}</td>
+                <td>{{ r.tipo_vehiculo|default:"-" }}</td>
+                <td>{{ r.sueldo }} Bs</td>
+                <td>
+                    {% if r.disponibilidad %}
+                        <span class="badge-estado badge-estado-entregado">Disponible</span>
+                    {% else %}
+                        <span class="badge-estado badge-estado-pendiente">Ocupado</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-center subtitle-muted">
+                    No hay repartidores registrados.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

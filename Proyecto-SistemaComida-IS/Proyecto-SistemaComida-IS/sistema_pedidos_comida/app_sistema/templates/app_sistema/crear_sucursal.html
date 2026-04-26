@@ -1,0 +1,33 @@
+{% extends "app_sistema/base.html" %}
+{% load static %}
+
+{% block title %}Crear sucursal | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h2 class="page-title mb-2">🏬 Crear sucursal</h2>
+                <p class="subtitle-muted mb-4">
+                    Nueva sucursal para la empresa <strong>{{ empresa.nombre }}</strong>.
+                </p>
+
+                <form method="post" novalidate enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'lista_sucursales' empresa.id_empresa %}" class="btn btn-outline-secondary btn-pill">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-pill">
+                            Guardar sucursal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Datos de repartidor | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center fade-in-up">
+    <div class="col-md-6">
+        <div class="card card-delivery">
+            <div class="card-body">
+                <h3 class="card-title mb-2">🚚 Datos de repartidor</h3>
+                <p class="subtitle-muted mb-4">
+                    Completa la información de tu vehículo, disponibilidad y teléfono para realizar entregas.
+                </p>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text"
+                               name="telefono"
+                               class="form-control"
+                               placeholder="Ej. 78945612"
+                               value="{{ request.user.usuario.telefono|default_if_none:'' }}">
+                    </div>
+
+                    <button class="btn btn-guardar-datos btn-primary btn-pill w-100 mt-2">
+                        Guardar datos
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

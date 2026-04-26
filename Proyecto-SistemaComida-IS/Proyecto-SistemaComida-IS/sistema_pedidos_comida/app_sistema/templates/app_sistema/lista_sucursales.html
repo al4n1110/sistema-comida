@@ -1,0 +1,60 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Sucursales | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-1">🏬 Sucursales de {{ empresa.nombre }}</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Elige una sucursal para ver sus platos o realizar un pedido.
+</p>
+
+{% if tipo_usuario == 'admin' %}
+    <a href="{% url 'crear_sucursal' empresa.id_empresa %}" class="btn btn-primary mb-4 fade-in-up">
+        ➕ Crear sucursal
+    </a>
+{% endif %}
+
+<div class="row g-4">
+    {% for s in sucursales %}
+    <div class="col-md-4 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+
+                {# Imagen de la sucursal (si tiene) #}
+                {% if s.imagen %}
+                    <div class="mb-3">
+                        <img src="{{ s.imagen.url }}"
+                             alt="Sucursal {{ s.direccion }}"
+                             class="img-fluid rounded"
+                             style="max-height: 140px; width: 100%; object-fit: cover;">
+                    </div>
+                {% endif %}
+
+                <h4 class="card-title mb-1">📍 {{ s.nombre }} - {{ s.direccion }}</h4>
+                <p class="subtitle-muted mb-1">
+                    ⏰ {{ s.horario_apertura }} - {{ s.horario_cierre }}
+                </p>
+                <p class="subtitle-muted">📞 {{ s.telefono }}</p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'platos_sucursal' s.id_sucursal %}" class="btn btn-guardar-cambios btn-primary btn-sm">
+                        Ver platos
+                    </a>
+
+                    {% if tipo_usuario == 'admin' %}
+                        <a href="{% url 'editar_sucursal' s.id_sucursal %}" class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+                        <a href="{% url 'eliminar_sucursal' s.id_sucursal %}" class="btn btn-danger btn-sm">
+                            Eliminar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="fade-in-up">No hay sucursales registradas.</p>
+    {% endfor %}
+</div>
+{% endblock %}

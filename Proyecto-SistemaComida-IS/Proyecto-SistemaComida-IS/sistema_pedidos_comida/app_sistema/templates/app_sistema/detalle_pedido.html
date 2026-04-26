@@ -1,0 +1,139 @@
+{% extends 'app_sistema/base.html' %}
+
+{% block title %}Detalle del pedido | Delivery Express{% endblock %}
+
+{% block content %}
+<div class="row fade-in-up mb-3">
+    <div class="col-md-8">
+        <h2 class="page-title mb-2">Detalle del pedido #{{ pedido.id_pedido }}</h2>
+        <p class="subtitle-muted mb-1">
+            {% with det=pedido.detalles.all.0 %}
+                {% if det %}
+                    Realizado el {{ det.fecha_pedido }} a las {{ det.hora_pedido }}
+                {% else %}
+                    Fecha no disponible
+                {% endif %}
+            {% endwith %}
+        </p>
+    </div>
+    <div class="col-md-4 text-md-end text-start">
+        <p class="mb-1">
+            {% if pedido.estado == 'pendiente' %}
+                <span class="badge-estado badge-estado-pendiente">Pendiente</span>
+            {% elif pedido.estado == 'asignado' %}
+                <span class="badge-estado badge-estado-asignado">Asignado</span>
+            {% elif pedido.estado == 'entregado' %}
+                <span class="badge-estado badge-estado-entregado">Entregado</span>
+            {% else %}
+                {{ pedido.estado }}
+            {% endif %}
+        </p>
+        <p class="subtitle-muted mb-0">
+            Sucursal: <strong>{{ pedido.sucursal.direccion }}</strong>
+        </p>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <!-- Datos del cliente -->
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">👤 Datos del cliente</h5>
+                <p class="mb-1">
+                    <strong>Nombre:</strong>
+                    {{ pedido.cliente.id_cliente.nombres }}
+                    {{ pedido.cliente.id_cliente.paterno }}
+                </p>
+                <p class="mb-1">
+                    <strong>Teléfono:</strong>
+                    {{ pedido.cliente.id_cliente.telefono|default:"No registrado" }}
+                </p>
+                <p class="mb-1">
+                    <strong>Correo:</strong>
+                    {{ pedido.cliente.id_cliente.email|default:"No registrado" }}
+                </p>
+                <p class="mb-1">
+                    <strong>Dirección de entrega:</strong>
+                    {{ pedido.direccion_entrega }}
+                </p>
+                <p class="mb-0">
+                    <strong>Dirección registrada:</strong>
+                    {{ pedido.cliente.direccion|default:"Sin dirección registrada" }}
+                </p>
+                <p class="mb-0 mt-1">
+                    <strong>Referencia:</strong>
+                    {{ pedido.cliente.preferencias_entrega|default:"Sin referencia" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos del repartidor -->
+    <div class="col-md-6 fade-in-up">
+        <div class="card card-delivery h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3">🚚 Repartidor</h5>
+                {% if pedido.repartidor %}
+                    <p class="mb-1">
+                        <strong>Nombre:</strong>
+                        {{ pedido.repartidor.id_repartidor.nombres }}
+                        {{ pedido.repartidor.id_repartidor.paterno }}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Vehículo:</strong>
+                        {{ pedido.repartidor.vehiculo }} ({{ pedido.repartidor.tipo_vehiculo }})
+                    </p>
+                    <p class="mb-0">
+                        <strong>Disponibilidad:</strong>
+                        {% if pedido.repartidor.disponibilidad %}
+                            Disponible
+                        {% else %}
+                            Ocupado
+                        {% endif %}
+                    </p>
+                {% else %}
+                    <p class="subtitle-muted mb-0">
+                        Aún no se ha asignado repartidor a este pedido.
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Platos del pedido -->
+<div class="fade-in-up">
+    <div class="card card-delivery">
+        <div class="card-body">
+            <h5 class="card-title mb-3">🍽️ Platos del pedido</h5>
+
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Plato</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in detalles %}
+                        <tr>
+                            <td>{{ d.plato.nombre_plato }}</td>
+                            <td>{{ d.cantidad }}</td>
+                            <td>{{ d.subtotal }} Bs</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+            <p class="text-end fw-bold mb-0">
+                Total: {{ total }} Bs
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

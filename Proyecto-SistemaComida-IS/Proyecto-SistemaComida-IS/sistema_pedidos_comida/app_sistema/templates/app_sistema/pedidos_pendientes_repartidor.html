@@ -1,0 +1,79 @@
+{% extends "app_sistema/base.html" %}
+
+{% block title %}Pedidos para repartir | Delivery Express{% endblock %}
+
+{% block content %}
+<h2 class="page-title fade-in-up mb-2">🚚 Pedidos para repartir</h2>
+<p class="subtitle-muted fade-in-up mb-4">
+    Aquí verás los pedidos pendientes que puedes tomar, y los que ya tienes asignados.
+</p>
+
+<div class="table-responsive fade-in-up">
+    <table class="table table-modern align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Dirección entrega</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pedidos %}
+            <tr>
+                <td>#{{ p.id_pedido }}</td>
+                <td>
+                    {% with det=p.detalles.all.0 %}
+                    {% if det %}
+                    {{ det.fecha_pedido }} {{ det.hora_pedido }}
+                    {% else %}
+                    -
+                    {% endif %}
+                    {% endwith %}
+                </td>
+                <td>
+                    {{ p.cliente.id_cliente.nombres }}
+                    {{ p.cliente.id_cliente.paterno }}
+                </td>
+                <td>{{ p.direccion_entrega }}</td>
+
+                <td>
+                    {% if p.estado == 'pendiente' %}
+                    <span class="badge-estado badge-estado-pendiente">Pendiente</span>
+                    {% elif p.estado == 'asignado' %}
+                    <span class="badge-estado badge-estado-asignado">Asignado a ti</span>
+                    {% elif p.estado == 'entregado' %}
+                    <span class="badge-estado badge-estado-entregado">Entregado</span>
+                    {% else %}
+                    {{ p.estado }}
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'detalle_pedido' p.id_pedido %}" class="btn btn-ver-detalle btn-info btn-sm btn-pill mb-1">
+                        Ver detalle
+                    </a>
+
+                    {% if p.estado == 'pendiente' and not p.repartidor %}
+                    <form action="{% url 'tomar_pedido' p.id_pedido %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn btn-success btn-sm btn-pill">
+                            Tomar pedido
+                        </button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center subtitle-muted">
+                    No hay pedidos pendientes en este momento.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
